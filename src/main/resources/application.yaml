@@ -1,5 +1,5 @@
 server:
-  port: 10_16
+  port: 1016
 
 program-agent:
   charts:
@@ -12,8 +12,8 @@ program-agent:
 
 telegram:
   bot:
-    username: "@for_command_test_demo_bot"
-    token: "5801763120:AAF6UuL0c3cDS_NSf49nsaZ8CInmUXGmUYo"
+    username: "MyTestBotanBot"
+    token: "6488103958:AAHPKFMMzIODMGILBUp0-mLOcYj6Ybfocik"
     session:
       enable: true
       time-life:
@@ -30,11 +30,11 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/${bot.data_base}
-    username: myuser
-    password: password12345
+    username: user
+    password: password
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     database-platform: ru.wdeath.programagent.lib.config.WDSDBDialect
     open-in-view: false
     show-sql: true
