@@ -25,6 +25,7 @@ public class TestCommand {
     @Autowired
     private ApplicationContext applicationContext;
 
+
     @CommandFirst
     public void perviiRazDa(TelegramLongPollingEngine engine, @ParamName("chatId") Long chatId) {
         String text = "И тебе привет\n\n";
@@ -46,7 +47,7 @@ public class TestCommand {
     public void other(CommandContext context, @ParamName("chatId") Long chatId, @ParamName("messageId") Long mId) {
         var send = new SendMessage();
         send.setChatId( String.valueOf( chatId ) );
-        send.setText( "Я уже с тобой поздоровался! Твой сообщение id: " + mId + ", а данные внутри: " + context.getData() );
+        send.setText( generateListCommands());
 
         context.getEngine().executeNotException( send );
     }
