@@ -9,12 +9,26 @@ import ru.test.command.tgbot.demobot.service.ProductService;
 @Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
-    MessageService messageService;
+    private final MessageService messageService;
+    private final SequenceImpl sequence;
+
+    public ProductServiceImpl(MessageService messageService, SequenceImpl sequence) {
+        this.messageService = messageService;
+        this.sequence = sequence;
+    }
 
     public NewProduct getByMessage(String message) {
+
         String productName = messageService.getProductName( message );
         String productDescription = messageService.getDescription( message );
         String productPrice = messageService.getPrice( message );
-        return new NewProduct();
+
+        NewProduct newProduct = new NewProduct();
+        newProduct.setId( (long) sequence.get() );
+        newProduct.setName( productName );
+        newProduct.setDescription( productDescription );
+        newProduct.setPrice( Double.valueOf( productPrice ) );
+
+        return newProduct;
     }
 }

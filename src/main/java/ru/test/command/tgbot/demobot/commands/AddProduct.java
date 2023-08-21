@@ -47,10 +47,14 @@ public class AddProduct {
     }
 
     @CommandOther
-    public void addProductNewProduct(TelegramLongPollingEngine engine, CommandContext context, @ParamName("chatId") Long chatId) {
-        String message = context.getUpdate().getMessage().getText();
-
-        NewProduct newProduct = productService.getByMessage(message);
+    public void addProductNewProduct(TelegramLongPollingEngine engine, CommandContext context, @ParamName("chatId") Long chatId) throws TelegramApiException {
+        String message = "Вы не являетесь админом, вам не разрешено добавлять товары";
+        if (adminService.isAdmin( engine.getMe().getId() )) {
+            message = context.getUpdate().getMessage().getText();
+            NewProduct newProduct = productService.getByMessage( message );
+            repository.save( newProduct );
+            message = "Товар с id " + newProduct.getId() + " успешно добавлен";
+        }
         var send = new SendMessage();
         send.setChatId( String.valueOf( chatId ) );
         send.setText( message );

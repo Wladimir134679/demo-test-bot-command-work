@@ -34,7 +34,7 @@ public class AddAdmin {
         adminService.add( newAdmin );
         var send = new SendMessage();
         send.setChatId( String.valueOf( chatId ) );
-        send.setText( " Пользователь с id :" + chatId + " -  добавлен в администраторы " );
+        send.setText( " Пользователь с id :" + engine.getMe().getId() + " -  добавлен в администраторы " );
         try{
             engine.execute( send );
         } catch(TelegramApiException e){
