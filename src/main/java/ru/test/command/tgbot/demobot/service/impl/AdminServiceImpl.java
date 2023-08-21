@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.test.command.tgbot.demobot.model.users.Admin;
 import ru.test.command.tgbot.demobot.repository.impl.AdminRepository;
 import ru.test.command.tgbot.demobot.service.AdminService;
+import ru.test.command.tgbot.demobot.service.MyAdminMethods;
 
-@Service
 @Slf4j
+@Service
 public class AdminServiceImpl implements AdminService, MyAdminMethods {
 
     private final AdminRepository repository;
