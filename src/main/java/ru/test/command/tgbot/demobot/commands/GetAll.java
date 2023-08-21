@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CommandNames("/getAllByBasket")
 public class GetAll {
+
     private final Basket basket;
 
 
