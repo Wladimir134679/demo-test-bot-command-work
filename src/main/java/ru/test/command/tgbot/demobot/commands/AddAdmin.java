@@ -27,7 +27,7 @@ public class AddAdmin {
     }
 
     @CommandFirst
-    public void perviiRazDa(TelegramLongPollingEngine engine, @ParamName("chatId") Long chatId) throws TelegramApiException {
+    public void newAdminRegister(TelegramLongPollingEngine engine, @ParamName("chatId") Long chatId) throws TelegramApiException {
         Long userId = engine.getMe().getId();
         Admin newAdmin = new Admin();
         newAdmin.setId( userId );
@@ -43,7 +43,7 @@ public class AddAdmin {
     }
 
     @CommandOther
-    public void other(CommandContext context, @ParamName("chatId") Long chatId, @ParamName("messageId") Long mId) {
+    public void afterRegister(CommandContext context, @ParamName("chatId") Long chatId, @ParamName("messageId") Long mId) {
         var send = new SendMessage();
         send.setChatId( String.valueOf( chatId ) );
         send.setText( " Пользователь с id :" + chatId + " -   уже добавлен в администраторы \n" +
