@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "userroles",
+      "type": "ru.test.command.tgbot.demobot.configuration.UserRolesConfig",
+      "sourceType": "ru.test.command.tgbot.demobot.configuration.UserRolesConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "userroles.user-and-status",
+      "type": "java.util.Map<java.lang.Long,java.lang.String>",
+      "sourceType": "ru.test.command.tgbot.demobot.configuration.UserRolesConfig"
+    }
+  ],
+  "hints": []
+}
