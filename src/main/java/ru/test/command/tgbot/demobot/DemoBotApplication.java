@@ -9,5 +9,4 @@ public class DemoBotApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoBotApplication.class, args);
 	}
-
 }
