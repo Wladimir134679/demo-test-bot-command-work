@@ -12,7 +12,10 @@ import ru.wdeath.managerbot.lib.bot.annotations.CommandNames;
 import ru.wdeath.managerbot.lib.bot.annotations.CommandOther;
 import ru.wdeath.managerbot.lib.bot.annotations.ParamName;
 import ru.wdeath.managerbot.lib.bot.command.CommandContext;
+
+import java.util.Arrays;
 import java.util.Map;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.test.command.tgbot.demobot.service.AdminService;
 
@@ -29,19 +32,15 @@ public class StartCommand {
 
     @CommandFirst
     public void perviiRazDa(CommandContext context,
-            @ParamName("chatId") Long chatId,
-            @ParamName("userId") Long userId,
-            Update update) {
+                            @ParamName("chatId") Long chatId,
+                            @ParamName("userId") Long userId,
+                            Update update) {
         String userFirstName = update.getMessage().getChat().getFirstName();
         String status = adminService.accessStatus(userId);
         String text = "Привет " + userFirstName + ", ваш статус: " + status + "\n\n";
         text += "\nДоступные вам команды:\n";
-        if (status.equals("ADMIN")) {
-            text += "/add_admin\n";
-            text += "/get_admins\n";
-        } else {
-            text += "Нет доступных команд.";
-        }
+
+        text += generateListCommands();
 
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
@@ -51,9 +50,9 @@ public class StartCommand {
     }
 
     @CommandOther
-    public void other(CommandContext context, 
-            @ParamName("chatId") Long chatId, 
-            @ParamName("messageId") Long mId) {
+    public void other(CommandContext context,
+                      @ParamName("chatId") Long chatId,
+                      @ParamName("messageId") Long mId) {
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
         send.setText("Я уже с вами поздоровался. ID вашего сообщения : " + mId + ", а данные внутри: " + context.getData());
@@ -67,8 +66,13 @@ public class StartCommand {
             return "Нет команд";
         }
         StringBuilder list = new StringBuilder();
-        for (String name : withAnnotation.keySet()) {
-            list.append(name).append("\n");
+        for (Object value : withAnnotation.values()) {
+            CommandNames annotation = value.getClass().getAnnotation(CommandNames.class);
+            list.append(value.getClass().getSimpleName()).append(": ");
+            for (String name : annotation.value()) {
+                list.append(name).append(" | ");
+            }
+            list.append("\n");
         }
         return list.toString();
     }

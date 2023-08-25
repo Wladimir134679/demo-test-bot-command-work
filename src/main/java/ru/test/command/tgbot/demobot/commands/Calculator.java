@@ -20,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class Calculator {
 
+    // TODO: вынести в отдельный сервис, и делать перменные private
     List<String> memory = new ArrayList<>();
     List<String> cal_his = new ArrayList<>();
 
@@ -42,6 +43,22 @@ public class Calculator {
         String str = context.getUpdate().getMessage().getText();
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
+
+        // TODO: доработать сессию с юзером
+//        context.getUserBotSession().setData(new ArrayList<String>());
+//        ArrayList<String> data = (ArrayList<String>) context.getUserBotSession().getData(); // тут ещё нужно на null проверить, например так
+
+        // Это нужно выполнить в first команде, когда первый раз пользователь прислал сообщение, нужно начать сессию так
+//        context.getUserBotSession().setData(new ArrayList<String>());
+//
+//        // А это уже в other
+//        Object data = context.getUserBotSession().getData();
+//        if(data instanceof ArrayList<?> strings){
+//            // тут выполнять условия, типо есть данные
+//        }else{
+//            // иначе выдать ошибку, что пользователь без данных
+//        }
+
         switch (memory.size()) {
             case 0:
                 if (isNumeric(str)) {

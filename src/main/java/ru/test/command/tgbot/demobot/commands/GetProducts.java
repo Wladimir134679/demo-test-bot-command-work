@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.test.command.tgbot.demobot.model.product.NewProduct;
-import ru.test.command.tgbot.demobot.repository.impl.Basket;
 import ru.test.command.tgbot.demobot.repository.impl.ProductRepository;
 import ru.wdeath.managerbot.lib.bot.annotations.CommandFirst;
 import ru.wdeath.managerbot.lib.bot.annotations.CommandNames;
-import ru.wdeath.managerbot.lib.bot.annotations.CommandOther;
 import ru.wdeath.managerbot.lib.bot.annotations.ParamName;
 import ru.wdeath.managerbot.lib.bot.callback.CallbackData;
 import ru.wdeath.managerbot.lib.bot.callback.CallbackDataSender;
@@ -22,10 +20,10 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@CommandNames(value = Start.NAME)
-public class Start {
+@CommandNames(value = GetProducts.NAME)
+public class GetProducts {
 
-    public static final String NAME = "/start";
+    public static final String NAME = "/get_products";
 
     private final ProductRepository repository;
 

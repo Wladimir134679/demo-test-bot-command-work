@@ -15,9 +15,9 @@ import ru.wdeath.managerbot.lib.bot.annotations.ParamName;
 import ru.wdeath.managerbot.lib.bot.command.CommandContext;
 import java.util.Map;
 
-@CommandNames("/start")
-@Component
-@Slf4j
+//@CommandNames("/start")
+//@Component
+//@Slf4j
 public class TestCommand {
 
 

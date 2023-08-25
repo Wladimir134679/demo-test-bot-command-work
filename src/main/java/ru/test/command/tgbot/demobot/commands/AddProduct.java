@@ -36,33 +36,35 @@ public class AddProduct {
                 "Price: {Описание товара} \n\n";
 
         var send = new SendMessage();
-        send.setChatId( String.valueOf( chatId ) );
-        send.setText( text );
+        send.setChatId(String.valueOf(chatId));
+        send.setText(text);
 
-        try{
-            engine.execute( send );
-        } catch(TelegramApiException e){
-            throw new RuntimeException( e );
+        engine.executeNotException(send);
+        try {
+            engine.execute(send);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @CommandOther
     public void addProductNewProduct(TelegramLongPollingEngine engine, CommandContext context, @ParamName("chatId") Long chatId) throws TelegramApiException {
         String message = "Вы не являетесь админом, вам не разрешено добавлять товары";
-        if (adminService.isAdmin( engine.getMe().getId() )) {
+        // TODO: Исправить проверку админа, не того проверка
+        if (adminService.isAdmin(engine.getMe().getId())) {
             message = context.getUpdate().getMessage().getText();
-            NewProduct newProduct = productService.getByMessage( message );
-            repository.save( newProduct );
+            NewProduct newProduct = productService.getByMessage(message);
+            repository.save(newProduct);
             message = "Товар с id " + newProduct.getId() + " успешно добавлен";
         }
         var send = new SendMessage();
-        send.setChatId( String.valueOf( chatId ) );
-        send.setText( message );
+        send.setChatId(String.valueOf(chatId));
+        send.setText(message);
 
-        try{
-            engine.execute( send );
-        } catch(TelegramApiException e){
-            throw new RuntimeException( e );
+        try {
+            engine.execute(send);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
