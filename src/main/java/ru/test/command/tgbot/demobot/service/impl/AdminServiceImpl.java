@@ -6,11 +6,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.test.command.tgbot.demobot.configuration.UserRolesConfig;
+import ru.test.command.tgbot.demobot.model.users.Admin;
+import ru.test.command.tgbot.demobot.repository.impl.AdminRepository;
 import ru.test.command.tgbot.demobot.service.AdminService;
+import ru.test.command.tgbot.demobot.service.MyAdminMethods;
 
-@Service
 @Slf4j
-public class AdminServiceImpl implements AdminService {
+@Service
+public class AdminServiceImpl implements AdminService, MyAdminMethods {
+
+    private final AdminRepository repository;
+
+    public AdminServiceImpl(AdminRepository repository) {
+        this.repository = repository;
+    }
+
+    {
+        Admin newAdmin = new Admin();
+        newAdmin.setId(6488103958L);
+    }
 
     @Autowired
     private UserRolesConfig userRolesConfig;

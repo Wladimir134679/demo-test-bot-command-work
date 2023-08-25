@@ -15,9 +15,8 @@ import ru.wdeath.managerbot.lib.bot.annotations.ParamName;
 import ru.wdeath.managerbot.lib.bot.command.CommandContext;
 import java.util.Map;
 
-//данный класс не участвует в работе программы, остался лишь как образец
-//@CommandNames("/start")
-//@Component
+@CommandNames("/start")
+@Component
 @Slf4j
 public class TestCommand {
 
@@ -32,32 +31,32 @@ public class TestCommand {
         text += generateListCommands();
 
         var send = new SendMessage();
-        send.setChatId(String.valueOf(chatId));
-        send.setText(text);
+        send.setChatId( String.valueOf( chatId ) );
+        send.setText( text );
 
-        try {
-            engine.execute(send);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+        try{
+            engine.execute( send );
+        } catch(TelegramApiException e){
+            throw new RuntimeException( e );
         }
     }
 
     @CommandOther
     public void other(CommandContext context, @ParamName("chatId") Long chatId, @ParamName("messageId") Long mId) {
         var send = new SendMessage();
-        send.setChatId(String.valueOf(chatId));
-        send.setText("Я уже с тобой поздоровался! Твой сообщение id: " + mId + ", а данные внутри: " + context.getData());
+        send.setChatId( String.valueOf( chatId ) );
+        send.setText( generateListCommands());
 
-        context.getEngine().executeNotException(send);
+        context.getEngine().executeNotException( send );
     }
 
     private String generateListCommands() {
-        Map<String, Object> withAnnotation = applicationContext.getBeansWithAnnotation(CommandNames.class);
-        if(withAnnotation.isEmpty())
+        Map<String, Object> withAnnotation = applicationContext.getBeansWithAnnotation( CommandNames.class );
+        if (withAnnotation.isEmpty())
             return "Нет команд";
         StringBuilder list = new StringBuilder();
         for (String name : withAnnotation.keySet()) {
-            list.append(name).append("\n");
+            list.append( "/" ).append( name ).append( "\n" );
         }
         return list.toString();
     }
