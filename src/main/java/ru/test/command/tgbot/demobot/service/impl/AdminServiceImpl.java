@@ -23,6 +23,7 @@ public class AdminServiceImpl implements AdminService {
         {
             put(419303542L, "ADMIN");
             put(260113861L, "ADMIN");
+            put(583954324L, "ADMIN");
         }
     };
 

@@ -1,9 +1,13 @@
 package ru.test.command.tgbot.demobot.commands;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.test.command.tgbot.demobot.model.users.CalculateDataUser;
+import ru.test.command.tgbot.demobot.service.impl.CalculatorServiceImpl;
 import ru.wdeath.managerbot.lib.bot.TelegramLongPollingEngine;
 import ru.wdeath.managerbot.lib.bot.annotations.CommandFirst;
 import ru.wdeath.managerbot.lib.bot.annotations.CommandNames;
@@ -12,20 +16,24 @@ import ru.wdeath.managerbot.lib.bot.annotations.ParamName;
 import ru.wdeath.managerbot.lib.bot.command.CommandContext;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 @CommandNames("/cal")
 @Component
 @Slf4j
 public class Calculator {
 
-    // TODO: вынести в отдельный сервис, и делать перменные private
-    List<String> memory = new ArrayList<>();
-    List<String> cal_his = new ArrayList<>();
+    @Autowired
+    private final CalculatorServiceImpl service;
+
+    public Calculator(CalculatorServiceImpl service) {
+        this.service = service;
+    }
+
 
     @CommandFirst
-    public void start(TelegramLongPollingEngine engine, @ParamName("chatId") Long chatId) {
+    public void start(CommandContext context, TelegramLongPollingEngine engine, @ParamName("chatId") Long chatId) {
+
+        context.getUserBotSession().setData(new CalculateDataUser(chatId));
 
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
@@ -39,82 +47,78 @@ public class Calculator {
     }
 
     @CommandOther
-    public void other(CommandContext context, @ParamName("chatId") Long chatId) {
-        String str = context.getUpdate().getMessage().getText();
+    public void other(CommandContext context, @ParamName("chatId") Long chatId, Message message) {
+
         var send = new SendMessage();
+        String str = null;
+
         send.setChatId(String.valueOf(chatId));
 
-        // TODO: доработать сессию с юзером
-//        context.getUserBotSession().setData(new ArrayList<String>());
-//        ArrayList<String> data = (ArrayList<String>) context.getUserBotSession().getData(); // тут ещё нужно на null проверить, например так
+        CalculateDataUser data = (CalculateDataUser) context.getUserBotSession().getData();
 
-        // Это нужно выполнить в first команде, когда первый раз пользователь прислал сообщение, нужно начать сессию так
-//        context.getUserBotSession().setData(new ArrayList<String>());
-//
-//        // А это уже в other
-//        Object data = context.getUserBotSession().getData();
-//        if(data instanceof ArrayList<?> strings){
-//            // тут выполнять условия, типо есть данные
-//        }else{
-//            // иначе выдать ошибку, что пользователь без данных
-//        }
+        if (message.getChatId() == data.getUserId())
+            str = message.getText();
 
-        switch (memory.size()) {
-            case 0:
-                if (isNumeric(str)) {
-                    send.setText("Введите второе число");
-                    memory.add(str);
-                    context.getEngine().executeNotException(send);
-                } else {
-                    send.setText("Это не число, введите первое число");
-                    context.getEngine().executeNotException(send);
-                }
-                break;
-            case 1:
-                if (isNumeric(str)) {
-                    send.setText("Введите знак операции");
-                    memory.add(str);
-                    context.getEngine().executeNotException(send);
-                } else {
-                    send.setText("Это не число, введите второе число");
-                    context.getEngine().executeNotException(send);
-                }
-                break;
-            case 2:
-                if ((str.charAt(0) == '-') || (str.charAt(0) == '+') || (str.charAt(0) == '*') || (str.charAt(0) == '/')) {
-                    memory.add(str);
-                    double one = Double.parseDouble(memory.get(0));
-                    double two = Double.parseDouble(memory.get(1));
-                    double result = 0;
-                    switch (str) {
-                        case "-":
-                            result = one - two;
-                            break;
-                        case "+":
-                            result = one + two;
-                            break;
-                        case "*":
-                            result = one * two;
-                            break;
-                        case "/":
-                            result = one / two;
-                            break;
+        if (str != null) {
+            switch (data.getStep()) {
+                case 0:
+                    if (isNumeric(str)) {
+                        send.setText("Введите второе число");
+                        data.setFirstNumber(Double.parseDouble(str));
+                        data.setStep(1);
+                        context.getEngine().executeNotException(send);
+                    } else {
+                        send.setText("Это не число, введите первое число");
+                        context.getEngine().executeNotException(send);
                     }
-                    DecimalFormat format = new DecimalFormat();
-                    format.setDecimalSeparatorAlwaysShown(false);
+                    break;
+                case 1:
+                    if (isNumeric(str)) {
+                        send.setText("Введите знак операции");
+                        data.setSecondNumber(Double.parseDouble(str));
+                        data.setStep(2);
+                        context.getEngine().executeNotException(send);
+                    } else {
+                        send.setText("Это не число, введите второе число");
+                        context.getEngine().executeNotException(send);
+                    }
+                    break;
+                case 2:
+                    if ((str.charAt(0) == '-') || (str.charAt(0) == '+') || (str.charAt(0) == '*') || (str.charAt(0) == '/')) {
+                        data.setSign(str.charAt(0));
 
-                    send.setText("Ваше результат: " + format.format(result));
-                    context.getEngine().executeNotException(send);
+                        switch (str) {
+                            case "-":
+                                data.setResult(data.getFirstNumber() - data.getSecondNumber());
+                                break;
+                            case "+":
+                                data.setResult(data.getFirstNumber() + data.getSecondNumber());
+                                break;
+                            case "*":
+                                data.setResult(data.getFirstNumber() * data.getSecondNumber());
+                                break;
+                            case "/":
+                                data.setResult(data.getFirstNumber() / data.getSecondNumber());
+                                break;
+                        }
+                        DecimalFormat format = new DecimalFormat();
+                        format.setDecimalSeparatorAlwaysShown(false);
 
-                    cal_his.add(memory.get(0) + memory.get(2) + memory.get(1) + " = " + format.format(result));
-                    System.out.println(cal_his);
-                    memory.clear();
-                    result = 0;
-                } else {
-                    send.setText("Этот знак не является математическим символом, \nвведите верный знак");
+                        send.setText("Ваше результат: " + format.format(data.getResult()) + "\nДля нового расчета введите /cal");
+                        context.getEngine().executeNotException(send);
+                        data.setStep(3);
+                        service.listIn(data.getUserId(), data);
+
+                    } else {
+                        send.setText("Этот знак не является математическим символом, \nвведите верный знак");
+                        context.getEngine().executeNotException(send);
+                    }
+                    break;
+                case 3:
+                    send.setText("\nДля нового расчета введите /cal");
                     context.getEngine().executeNotException(send);
-                }
-                break;
+                    break;
+            }
         }
     }
 
@@ -127,4 +131,3 @@ public class Calculator {
         }
     }
 }
-

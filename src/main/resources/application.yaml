@@ -12,8 +12,8 @@ program-agent:
 
 telegram:
   bot:
-    username: "@for_command_test_demo_bot_bot"
-    token: "6301409920:AAEbSfWH7PEBozF9MLoFh9jb4HQ3BRZkX0c"
+    username: "Boo88_bot"
+    token: "6428066817:AAHhwwWOqcqieIZ1wpP3M_jq3Zwv79lBm38"
     session:
       enable: true
       time-life:
@@ -29,9 +29,9 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/${bot.data_base}
+    url: jdbc:postgresql://localhost:5432/${bot.data_base}
     username: postgres
-    password: SomePassword1997
+    password: 111223
   jpa:
     hibernate:
       ddl-auto: validate
@@ -43,6 +43,7 @@ userroles:
   userandstatus:
     419303542: ADMIN #Владимир
     260113861: ADMIN #Юра
+    583954324: ADMIN #Сергей
     1348438810: DEFAULT #Ёж
     
 
