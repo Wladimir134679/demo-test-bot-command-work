@@ -29,14 +29,17 @@ public class StartCommand {
 
     @Autowired
     private AdminService adminService;
-
+    
     @CommandFirst
     public void perviiRazDa(CommandContext context,
                             @ParamName("chatId") Long chatId,
                             @ParamName("userId") Long userId,
                             Update update) {
         String userFirstName = update.getMessage().getChat().getFirstName();
-        String status = adminService.accessStatus(userId);
+        String status = "DEFAULT";
+        if(adminService.isAdmin(userId)){
+            status = "ADMIN";
+        }
         String text = "Привет " + userFirstName + ", ваш статус: " + status + "\n\n";
         text += "\nДоступные вам команды:\n";
 

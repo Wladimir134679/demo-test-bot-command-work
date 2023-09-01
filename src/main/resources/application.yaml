@@ -13,7 +13,7 @@ program-agent:
 telegram:
   bot:
     username: "@for_command_test_demo_bot_bot"
-    token: "6301409920:AAEbSfWH7PEBozF9MLoFh9jb4HQ3BRZkX0c"
+    token: "6301409920:AAGBNBPs-zXJLO2c0fYU4GthnMNyuxoVa_U"
     session:
       enable: true
       time-life:
@@ -39,10 +39,10 @@ spring:
     open-in-view: false
     show-sql: true
     
-userroles:
-  userandstatus:
-    419303542: ADMIN #Владимир
-    260113861: ADMIN #Юра
-    1348438810: DEFAULT #Ёж
-    
+admins:
+  - 419303542
+  - 260113861
+  - 1348438810
+  - 583954324
+   
 

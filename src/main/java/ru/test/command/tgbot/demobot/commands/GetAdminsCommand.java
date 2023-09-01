@@ -5,6 +5,7 @@
 package ru.test.command.tgbot.demobot.commands;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +42,12 @@ public class GetAdminsCommand {
             @ParamName("chatId") Long chatId,
             @ParamName("userId") Long userId) {
         String text = "";
-        if (!adminService.accessStatus(userId).equals("ADMIN")) {
+        if (!adminService.isAdmin(userId)) {
             text = "У вас нет полномочий для доступа к этой команде.";
         } else {
             text = "Тут должны выводиться ники и id, но из-за отсутствия БД сделать это можно только жутким го***кодом,\n"+
                     "поэтому пока так: \n";
-            text += MapToString(adminService.getAllAdmins());
+            text += ListToString(adminService.getAllAdmins());
         }
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
@@ -59,14 +60,11 @@ public class GetAdminsCommand {
     public void other(CommandContext context,
             @ParamName("chatId") Long chatId) {
     }
-
-    private String MapToString(Map<Long, String> allAdmins) {
+    
+    public String ListToString(List<Long> temporaryAdminStorage) {
         StringBuilder list = new StringBuilder();
-        for (Map.Entry<Long, String> entry : allAdmins.entrySet()) {
-            list.append(entry.getKey().toString())
-                .append(" : ")
-                .append(entry.getValue())
-                .append("\n");
+        for (Long id : temporaryAdminStorage) {
+            list.append(id.toString()).append("\n");
         }
         return list.toString();
     }

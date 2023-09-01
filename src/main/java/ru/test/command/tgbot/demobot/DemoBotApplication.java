@@ -2,7 +2,9 @@ package ru.test.command.tgbot.demobot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import ru.test.command.tgbot.demobot.configuration.AdminConfig;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "ru.test.command.tgbot.demobot.repository")

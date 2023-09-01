@@ -52,7 +52,7 @@ public class AddAdminCommand {
             @ParamName("userId") Long userId,
             Update update) {
         String text = "";
-        if (!adminService.accessStatus(userId).equals("ADMIN")) {
+        if (!adminService.isAdmin(userId)) {
             text = "У вас нет полномочий добавлять админов.";
         } else {
             Long newAdminId = Long.valueOf(update.getMessage().getText());

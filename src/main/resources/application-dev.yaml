@@ -38,4 +38,5 @@ spring:
     database-platform: ru.wdeath.programagent.lib.config.WDSDBDialect
     open-in-view: false
     show-sql: true
+    
 
