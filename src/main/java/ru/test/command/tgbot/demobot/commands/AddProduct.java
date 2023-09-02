@@ -51,8 +51,7 @@ public class AddProduct {
     public void addProductNewProduct(TelegramLongPollingEngine engine, CommandContext context, @ParamName("chatId") Long chatId) throws TelegramApiException {
         String message = "Вы не являетесь админом, вам не разрешено добавлять товары";
         long userId = context.getUserBotSession().getUserId();
-        adminService.isAdmin(userId);
-        if (true) {
+        if (adminService.isAdmin(userId)) {
             message = context.getUpdate().getMessage().getText();
             NewProduct newProduct = productService.getByMessage(message);
             repository.save(newProduct);
