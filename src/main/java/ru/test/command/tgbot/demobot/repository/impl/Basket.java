@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @Component
 public class Basket {
+
     private final ConcurrentHashMap<Long, List<NewProduct>> basket = new ConcurrentHashMap<>();
 
     public List<NewProduct> getByUserId(Long userId) {

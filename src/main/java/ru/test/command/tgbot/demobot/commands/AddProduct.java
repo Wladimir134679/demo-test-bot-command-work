@@ -33,7 +33,7 @@ public class AddProduct {
         String text = "Привет добавь товар  по следующим правилам \n\n" +
                 "Product: {Наименование товара} \n\n" +
                 "Description: {Описание товара} \n\n" +
-                "Price: {Описание товара} \n\n";
+                "Price: {Цена товара} \n\n";
 
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
@@ -50,8 +50,9 @@ public class AddProduct {
     @CommandOther
     public void addProductNewProduct(TelegramLongPollingEngine engine, CommandContext context, @ParamName("chatId") Long chatId) throws TelegramApiException {
         String message = "Вы не являетесь админом, вам не разрешено добавлять товары";
-        // TODO: Исправить проверку админа, не того проверка
-        if (adminService.isAdmin(engine.getMe().getId())) {
+        long userId = context.getUserBotSession().getUserId();
+        adminService.isAdmin(userId);
+        if (true) {
             message = context.getUpdate().getMessage().getText();
             NewProduct newProduct = productService.getByMessage(message);
             repository.save(newProduct);
@@ -60,12 +61,6 @@ public class AddProduct {
         var send = new SendMessage();
         send.setChatId(String.valueOf(chatId));
         send.setText(message);
-
-        try {
-            engine.execute(send);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+        engine.executeNotException(send);
     }
-
 }

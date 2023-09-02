@@ -35,7 +35,7 @@ public class MessageServiceImpl implements MessageService {
         String productName = "None";
         Matcher matcher = patternPrice.matcher( message );
         while (matcher.find()) {
-            productName = message.substring( matcher.start() + 12, matcher.end() );
+            productName = message.substring( matcher.start() + 6, matcher.end() );
         }
         return productName;
     }

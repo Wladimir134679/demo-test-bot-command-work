@@ -21,6 +21,7 @@ import ru.wdeath.managerbot.lib.bot.command.TypeCommand;
 @RequiredArgsConstructor
 @CommandNames(value = AddBasket.NAME, type = TypeCommand.CALLBACK)
 public class AddBasket {
+
     public static final String NAME = "add-basket";
 
     private final Basket basket;
@@ -31,7 +32,8 @@ public class AddBasket {
 
         Long productId = Long.valueOf( (String) context.getData() );
         NewProduct product = repository.get( productId );
-        basket.save( chatId, product );
+        long userId = context.getUserBotSession().getUserId();
+        basket.save( userId, product );
         var send = new SendMessage();
         send.setChatId( String.valueOf( chatId ) );
         send.setText( "Товар с id "+productId+ " добавлен в корзину" );

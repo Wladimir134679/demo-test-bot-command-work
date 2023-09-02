@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @CommandNames("/getAllByBasket")
-public class GetAll {
+public class GetAllByBasket {
 
     private final Basket basket;
 
